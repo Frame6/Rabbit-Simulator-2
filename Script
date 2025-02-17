@@ -1,7 +1,12 @@
 local LocalPlayer = game.Players.LocalPlayer
 local MenuTitle = "Rabbit Simulator"
 
-local ScreenGui = Instance.new("ScreenGui")
+
+local carrotActive = false
+local rebirthActive = false
+
+function setupGui()
+	local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local TitleBar = Instance.new("Frame")
 local TitleLabel = Instance.new("TextLabel")
@@ -64,9 +69,6 @@ RebirthButton.TextScaled = true
 RebirthButton.BorderSizePixel = 0
 RebirthButton.AutoButtonColor = false
 
-local carrotActive = false
-local rebirthActive = false
-
 CarrotButton.MouseButton1Click:Connect(function()
     carrotActive = not carrotActive
     CarrotButton.BackgroundColor3 = carrotActive and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
@@ -83,6 +85,11 @@ MinimizeButton.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
     Frame.Size = isMinimized and UDim2.new(0, 220, 0, 20) or UDim2.new(0, 220, 0, 120)
 end)
+end
+
+setupGui()
+
+LocalPlayer.CharacterAdded:Connect(setupGui)
 
 task.spawn(function()
     while true do
