@@ -1,0 +1,105 @@
+local LocalPlayer = game.Players.LocalPlayer
+local MenuTitle = "Rabbit Simulator"
+
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TitleBar = Instance.new("Frame")
+local TitleLabel = Instance.new("TextLabel")
+local MinimizeButton = Instance.new("TextButton")
+local CarrotButton = Instance.new("TextButton")
+local RebirthButton = Instance.new("TextButton")
+local isMinimized = false
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.Size = UDim2.new(0, 220, 0, 120)
+Frame.Position = UDim2.new(0.5, -110, 0.5, -60)
+Frame.Active = true
+Frame.Draggable = true
+Frame.BorderSizePixel = 0
+Frame.ClipsDescendants = true
+Frame.Visible = true
+Frame.ZIndex = 1  
+Frame.BackgroundTransparency = 0.05
+
+TitleBar.Parent = Frame
+TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+TitleBar.Size = UDim2.new(1, 0, 0, 20)
+TitleBar.Position = UDim2.new(0, 0, 0, 0)
+TitleBar.BorderSizePixel = 0
+
+TitleLabel.Parent = TitleBar
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Text = MenuTitle
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.Size = UDim2.new(1, 0, 1, 0)
+TitleLabel.Position = UDim2.new(0, 0, 0, 0)
+TitleLabel.BorderSizePixel = 0
+
+MinimizeButton.Parent = TitleBar
+MinimizeButton.Size = UDim2.new(0, 20, 0, 20)
+MinimizeButton.Position = UDim2.new(1, -25, 0, 0)
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(180, 180, 180)
+MinimizeButton.Text = "/"
+MinimizeButton.TextScaled = true
+MinimizeButton.BorderSizePixel = 0
+
+CarrotButton.Parent = Frame
+CarrotButton.Size = UDim2.new(0, 200, 0, 40)
+CarrotButton.Position = UDim2.new(0, 0, 0, 30)
+CarrotButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) 
+CarrotButton.Text = "Ativar Cenoura"
+CarrotButton.TextScaled = true
+CarrotButton.BorderSizePixel = 0
+CarrotButton.AutoButtonColor = false
+
+RebirthButton.Parent = Frame
+RebirthButton.Size = UDim2.new(0, 200, 0, 40)
+RebirthButton.Position = UDim2.new(0, 0, 0, 75)
+RebirthButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) 
+RebirthButton.Text = "Ativar Rebirth"
+RebirthButton.TextScaled = true
+RebirthButton.BorderSizePixel = 0
+RebirthButton.AutoButtonColor = false
+
+local carrotActive = false
+local rebirthActive = false
+
+CarrotButton.MouseButton1Click:Connect(function()
+    carrotActive = not carrotActive
+    CarrotButton.BackgroundColor3 = carrotActive and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    CarrotButton.Text = carrotActive and "Desativar Cenoura" or "Ativar Cenoura"
+end)
+
+RebirthButton.MouseButton1Click:Connect(function()
+    rebirthActive = not rebirthActive
+    RebirthButton.BackgroundColor3 = rebirthActive and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    RebirthButton.Text = rebirthActive and "Desativar Rebirth" or "Ativar Rebirth"
+end)
+
+MinimizeButton.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    Frame.Size = isMinimized and UDim2.new(0, 220, 0, 20) or UDim2.new(0, 220, 0, 120)
+end)
+
+task.spawn(function()
+    while true do
+        task.wait()
+        if carrotActive and game.Workspace:FindFirstChild(LocalPlayer.Name) and game.Workspace:FindFirstChild(LocalPlayer.Name):FindFirstChild("Carrot") then
+            local event = game.Workspace:FindFirstChild(LocalPlayer.Name).Carrot:FindFirstChild("E")
+            if event and event:IsA("RemoteEvent") then
+                event:FireServer()
+            end
+        end
+        if rebirthActive and game.ReplicatedStorage:FindFirstChild("RebirthMe") then
+            local event = game.ReplicatedStorage.RebirthMe
+            if event:IsA("RemoteEvent") then
+                event:FireServer()
+            end
+        end
+    end
+end)
+
+
